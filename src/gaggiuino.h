@@ -11,6 +11,7 @@
 #include "peripherals/internal_watchdog.h"
 #include "peripherals/pump.h"
 #include "peripherals/pressure_sensor.h"
+#include "peripherals/flow_sensor.h"
 #include "peripherals/scales.h"
 #include "peripherals/peripherals.h"
 #include "peripherals/thermocouple.h"

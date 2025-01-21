@@ -24,6 +24,9 @@ static inline void pinInit(void) {
   #ifdef waterPin
   pinMode(waterPin, INPUT_PULLUP);
   #endif
+  #ifdef flowPin
+  pinMode(flowPin, INPUT_PULLUP);
+  #endif
 }
 
 // Actuating the heater element

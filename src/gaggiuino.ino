@@ -87,6 +87,9 @@ void setup(void) {
   scalesInit(runningCfg.scalesF1, runningCfg.scalesF2);
   LOG_INFO("Scales init");
 
+  interruptInit();
+  LOG_INFO("Flow sensor init");
+
   // Pump init
   pumpInit(runningCfg.powerLineFrequency, runningCfg.pumpFlowAtZero);
   LOG_INFO("Pump init");
@@ -192,7 +195,11 @@ static long sensorsReadFlow(float elapsedTimeSec) {
   long pumpClicks = getAndResetClickCounter();
   currentState.pumpClicks = (float) pumpClicks / elapsedTimeSec;
 
+  #ifdef pumpPin
+  currentState.pumpFLow = getSensorFlow(elapsedTimeSec);
+  #else
   currentState.pumpFlow = getPumpFlow(currentState.pumpClicks, currentState.smoothedPressure);
+  #endif
 
   previousSmoothedPumpFlow = currentState.smoothedPumpFlow;
   // Some flow smoothing

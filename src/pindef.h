@@ -14,7 +14,9 @@
 #define dimmerPin     PA1
 #define steamPin      PC15
 #define valvePin      PC13
-#if defined(SINGLE_BOARD)
+#if defined(HARDWARE_FLOW)
+#define flowPin       PB15
+#elif defined(SINGLE_BOARD)
 #define waterPin      PB15
 #else
 #define waterPin      PA12
