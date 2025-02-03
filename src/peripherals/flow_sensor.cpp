@@ -1,7 +1,6 @@
 /* 09:32 15/03/2023 - change triggering comment */
 #include "flow_sensor.h"
 #include "pindef.h"
-#include "../lcd/lcd.h"
 #include "../log.h"
 
 volatile long pulseCount = 0;
