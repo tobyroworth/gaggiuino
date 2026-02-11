@@ -3,12 +3,11 @@
 #include "pindef.h"
 #include "remote_scales.h"
 
-#include <Wire.h>
 #include <NAU7802.h>
 
 bool hwScalesPresent = false;
 
-TwoWire scales_i2c = TwoWire(SCALES_SDA, SCALES_SCL);
+// TwoWire scales_i2c(SCALES_SDA, SCALES_SCL);
 NAU7802& scales = NAU7802::getInstance();
 
 void scalesInit(float scalesF1, float scalesF2) {
@@ -19,13 +18,11 @@ void scalesInit(float scalesF1, float scalesF2) {
   }
 
 #ifndef DISABLE_HW_SCALES
-  scales.init(scalesF1, scalesF2, &scales_i2c, SCALES_RDY);
-  hwScalesPresent = true;
+  hwScalesPresent = !scales.init(scalesF1, scalesF2, &Wire, SCALES_RDY);
+  // hwScalesPresent = true;
 #endif
 
-  if (!hwScalesPresent && remoteScalesIsPresent()) {
-    remoteScalesTare();
-  }
+  scalesTare();
 }
 
 bool serviceScales(void) {

@@ -19,7 +19,7 @@ float calibration_factor_lc2 = 4000; //-7050 worked for my 440lb max scale setup
 //Nextion object init
 EasyNex myNex(UART_LCD);
 
-TwoWire scales_i2c = TwoWire(SCALES_SDA, SCALES_SCL);
+// TwoWire scales_i2c = TwoWire(SCALES_SDA, SCALES_SCL);
 NAU7802& scales = NAU7802::getInstance();
 
 void setup() {
@@ -32,7 +32,8 @@ void setup() {
     delay(600);
   }
 
-  scales.init(calibration_factor_lc1, calibration_factor_lc2, &scales_i2c, SCALES_RDY);
+  // scales.init(calibration_factor_lc1, calibration_factor_lc2, &scales_i2c, SCALES_RDY);
+  scales.init(calibration_factor_lc1, calibration_factor_lc2, &Wire, SCALES_RDY);
 
   USART_DEBUG.println("Initialized");
 }

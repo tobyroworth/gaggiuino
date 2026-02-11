@@ -24,7 +24,7 @@ public:
     return instance;
   }
 
-  void init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPin);
+  bool init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPin);
   bool service(void);
   void tare(void);
   void setFactors(float factor1, float factor2);

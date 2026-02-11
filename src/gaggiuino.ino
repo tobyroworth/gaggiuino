@@ -433,10 +433,10 @@ static void lcdRefresh(void)
       break; // don't push needless data on other pages
     }
 
-  #ifdef DEBUG_ENABLED
-    getAdsError();
-    lcdShowDebug(readTempSensor(), 0);
-  #endif
+    // #ifdef DEBUG_ENABLED
+    //   getAdsError();
+    //   lcdShowDebug(readTempSensor(), 0);
+    // #endif
 
     /*LCD timer and warmup*/
     if (brewActive)

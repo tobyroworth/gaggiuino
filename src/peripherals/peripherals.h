@@ -27,6 +27,9 @@ static inline void pinInit(void) {
   #ifdef flowPin
   pinMode(flowPin, INPUT_PULLUP);
   #endif
+  pinMode(SCALES_RDY, INPUT);
+  pinMode(SCALES_SCL, INPUT);
+  pinMode(SCALES_SDA, INPUT);
 }
 
 // Actuating the heater element

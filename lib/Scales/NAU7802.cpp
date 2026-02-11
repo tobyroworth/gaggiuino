@@ -10,25 +10,31 @@ void handleScalesReady(void) {
   }
 }
 
-void NAU7802::init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPin) {
+bool NAU7802::init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPin) {
 
-  pinMode(drdyPin, INPUT);
-  attachInterrupt(digitalPinToInterrupt(drdyPin), handleScalesReady, RISING);
+  bool error = false;
 
-  this->nau.begin(i2c);
-  this->nau.setLDO(NAU7802_4V2);
-  this->nau.setGain(NAU7802_GAIN_128);
-  this->nau.setRate(NAU7802_RATE_80SPS);
+  // pinMode(drdyPin, INPUT);
+  // attachInterrupt(digitalPinToInterrupt(drdyPin), handleScalesReady, RISING);
 
-  this->setFactors(scalesF1, scalesF2);
+  error = this->nau.begin(i2c);
+  // if (error) { return error; };
+  error = this->nau.setLDO(NAU7802_4V2);
+  error = this->nau.setGain(NAU7802_GAIN_128);
+  error = this->nau.setRate(NAU7802_RATE_20SPS);
+  // if (error) { return error; };
+  // this->setFactors(scalesF1, scalesF2);
+  this->setFactors(1996.0f, 2605.0f);
 
-  this->nau.calibrate(NAU7802_CALMOD_INTERNAL);
+  error = this->nau.calibrate(NAU7802_CALMOD_INTERNAL);
+  // if (error) { return error; };
 
-  this->tare();
+  // this->tare();
+  return false;
 }
 
 bool NAU7802::service(void) {
-  if (_ready) {
+  if (this->nau.available()) {
     const int32_t reading = this->nau.read();
     this->_readings[this->_channel] = reading;
 
@@ -49,14 +55,14 @@ void NAU7802::tare(void) {
     this->service();
   }
 
-  for (uint8_t readings = 0; readings < 32; readings++) {
+  for (uint8_t readings = 0; readings < 4; readings++) {
     // get first channel
     while (!this->service());
     // get second channel
     while (!this->service());
     newTareWeight += this->getWeight().value;
   }
-  this->_tareWeight = newTareWeight / 32;
+  this->_tareWeight = newTareWeight / 4;
 }
 
 
