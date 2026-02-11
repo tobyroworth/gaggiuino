@@ -4,7 +4,7 @@
 
 #include <Arduino.h>
 
-void interruptInit(void);
+void flowInterruptInit(void);
 float getSensorFlow(const float elapsedTimeSec);
 
 #endif

@@ -11,10 +11,10 @@ void handleFlowPulse(void) {
   pulseCount++;
 }
 
-void interruptInit(void) {
-  #ifdef flowPin
+void flowInterruptInit(void) {
+#ifdef flowPin
   attachInterrupt(digitalPinToInterrupt(flowPin), handleFlowPulse, RISING);
-  #endif
+#endif
 }
 
 float getSensorFlow(const float elapsedTimeSec) {

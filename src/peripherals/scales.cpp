@@ -3,27 +3,13 @@
 #include "pindef.h"
 #include "remote_scales.h"
 
-#include <HX711_2.h>
-namespace {
-  class LoadCellSingleton {
-  public:
-    static HX711_2& getInstance() {
-      static HX711_2 instance(TIM3);
-      return instance;
-    }
-  private:
-    LoadCellSingleton() = default;
-    ~LoadCellSingleton() = default;
-  };
-}
+#include <Wire.h>
+#include <NAU7802.h>
 
 bool hwScalesPresent = false;
 
-#if defined SINGLE_HX711_BOARD
-unsigned char scale_clk = OUTPUT;
-#else
-unsigned char scale_clk = OUTPUT_OPEN_DRAIN;
-#endif
+TwoWire scales_i2c = TwoWire(SCALES_SDA, SCALES_SCL);
+NAU7802& scales = NAU7802::getInstance();
 
 void scalesInit(float scalesF1, float scalesF2) {
   hwScalesPresent = false;
@@ -33,18 +19,8 @@ void scalesInit(float scalesF1, float scalesF2) {
   }
 
 #ifndef DISABLE_HW_SCALES
-  auto& loadCells = LoadCellSingleton::getInstance();
-  loadCells.begin(HX711_dout_1, HX711_dout_2, HX711_sck_1, 128U, scale_clk);
-  loadCells.set_scale(scalesF1, scalesF2);
-  loadCells.power_up();
-
-  if (loadCells.wait_ready_timeout(1000, 10)) {
-    loadCells.tare(4);
-    hwScalesPresent = true;
-  }
-  else {
-    loadCells.power_down();
-  }
+  scales.init(scalesF1, scalesF2, &scales_i2c, SCALES_RDY);
+  hwScalesPresent = true;
 #endif
 
   if (!hwScalesPresent && remoteScalesIsPresent()) {
@@ -52,32 +28,37 @@ void scalesInit(float scalesF1, float scalesF2) {
   }
 }
 
+bool serviceScales(void) {
+  if (hwScalesPresent) {
+    return scales.service();
+  }
+  return false;
+}
+
 void scalesTare(void) {
   if (hwScalesPresent) {
-    auto& loadCells = LoadCellSingleton::getInstance();
-    if (loadCells.wait_ready_timeout(150, 10)) {
-      loadCells.tare(4);
-    }
+    scales.tare();
   }
   else if (remoteScalesIsPresent()) {
     remoteScalesTare();
   }
 }
 
+
+void scalesSetFactors(float factor1, float factor2) {
+  scales.setFactors(factor1, factor2);
+}
+
+void scalesGetReadings(int32_t readings[]) {
+  scales.getReadings(readings);
+}
+
+void scalesGetUnits(float units[]) {
+  scales.getUnits(units);
+}
+
 Measurement scalesGetWeight(void) {
-  Measurement currentWeight = Measurement{ .value = 0.f, .millis = 0 };
-  if (hwScalesPresent) {
-    auto& loadCells = LoadCellSingleton::getInstance();
-    if (loadCells.wait_ready_timeout(150, 10)) {
-      float values[2];
-      loadCells.get_units(values);
-      currentWeight = Measurement{ .value=values[0] + values[1], .millis=millis() };
-    }
-  }
-  else if (remoteScalesIsPresent()) {
-    currentWeight = remoteScalesGetWeight();
-  }
-  return currentWeight;
+  return scales.getWeight();
 }
 
 bool scalesIsPresent(void) {
@@ -88,10 +69,10 @@ bool scalesIsPresent(void) {
   return hwScalesPresent || remoteScalesIsPresent();
 }
 
-float scalesDripTrayWeight() {
-  long value[2] = {};
-  if (hwScalesPresent) {
-    LoadCellSingleton::getInstance().read_average(value, 4);
-  }
-  return ((float)value[0] + (float)value[1]);
-}
+// float scalesDripTrayWeight() {
+//   long value[2] = {};
+//   if (hwScalesPresent) {
+//     LoadCellSingleton::getInstance().read_average(value, 4);
+//   }
+//   return ((float)value[0] + (float)value[1]);
+// }

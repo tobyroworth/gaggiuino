@@ -28,9 +28,13 @@
 #define steamBoilerRelayPin PB13
 #endif
 
-#define HX711_sck_1   PB0
-#define HX711_dout_1  PB8
-#define HX711_dout_2  PB9
+// #define HX711_sck_1   PB0
+// #define HX711_dout_1  PB8
+// #define HX711_dout_2  PB9
+
+#define SCALES_SDA    PB9
+#define SCALES_SCL    PB8
+#define SCALES_RDY    PB0
 
 #define USART_LCD     Serial2 // PA2(TX) & PA3(RX)
 #define USART_ESP     Serial1 // PA9(TX) & PA10(RX)

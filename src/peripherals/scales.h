@@ -9,9 +9,13 @@
 #include "measurements.h"
 
 void scalesInit(float scalesF1, float scalesF2);
+bool serviceScales(void);
 void scalesTare(void);
+void scalesSetFactors(float factor1, float factor2);
+void scalesGetReadings(int32_t readings[]);
+void scalesGetUnits(float units[]);
 Measurement scalesGetWeight(void);
 bool scalesIsPresent(void);
-float scalesDripTrayWeight();
+// float scalesDripTrayWeight();
 
 #endif
