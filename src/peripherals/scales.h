@@ -9,7 +9,7 @@
 #include <Wire.h>
 #include "measurements.h"
 
-void scalesInit(float scalesF1, float scalesF2);
+void scalesInit(float scalesOffset1, float scalesOffset2, float scalesFactor1, float scalesFactor2);
 bool serviceScales(void);
 void scalesTare(void);
 void scalesSetFactors(float factor1, float factor2);

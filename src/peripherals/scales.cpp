@@ -10,7 +10,7 @@ bool hwScalesPresent = false;
 // TwoWire scales_i2c(SCALES_SDA, SCALES_SCL);
 NAU7802& scales = NAU7802::getInstance();
 
-void scalesInit(float scalesF1, float scalesF2) {
+void scalesInit(float scalesOffset1, float scalesOffset2, float scalesFactor1, float scalesFactor2) {
   hwScalesPresent = false;
   // Forced predicitve scales in case someone with actual hardware scales wants to use them.
   if (FORCE_PREDICTIVE_SCALES) {
@@ -18,7 +18,7 @@ void scalesInit(float scalesF1, float scalesF2) {
   }
 
 #ifndef DISABLE_HW_SCALES
-  hwScalesPresent = !scales.init(scalesF1, scalesF2, &Wire, SCALES_RDY);
+  hwScalesPresent = !scales.init(scalesOffset1, scalesOffset2, scalesFactor1, scalesFactor2, &Wire, SCALES_RDY);
   // hwScalesPresent = true;
 #endif
 

@@ -10,7 +10,14 @@ void handleScalesReady(void) {
   }
 }
 
-bool NAU7802::init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPin) {
+bool NAU7802::init(
+  float scalesOffset1,
+  float scalesOffset2,
+  float scalesFactor1,
+  float scalesFactor2,
+  TwoWire* i2c,
+  uint32_t drdyPin
+) {
 
   bool error = false;
 
@@ -23,8 +30,8 @@ bool NAU7802::init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPi
   error = this->nau.setGain(NAU7802_GAIN_128);
   error = this->nau.setRate(NAU7802_RATE_20SPS);
   // if (error) { return error; };
-  // this->setFactors(scalesF1, scalesF2);
-  this->setFactors(1996.0f, 2605.0f);
+  this->setOffset(scalesOffset1, scalesOffset2);
+  this->setFactors(scalesFactor1, scalesFactor2);
 
   error = this->nau.calibrate(NAU7802_CALMOD_INTERNAL);
   // if (error) { return error; };
@@ -65,6 +72,10 @@ void NAU7802::tare(void) {
   this->_tareWeight = newTareWeight / 4;
 }
 
+void NAU7802::setOffset(float offset1, float offset2) {
+  this->_offsets[0] = offset1;
+  this->_offsets[1] = offset2;
+}
 
 void NAU7802::setFactors(float factor1, float factor2) {
   this->_factors[0] = factor1;
@@ -77,8 +88,8 @@ void NAU7802::getReadings(int32_t* readings) {
 }
 
 void NAU7802::getUnits(float* units) {
-  units[0] = (float)this->_readings[0] / this->_factors[0];
-  units[1] = (float)this->_readings[1] / this->_factors[1];
+  units[0] = (float)this->_readings[0] * this->_factors[0] + this->_offsets[0];
+  units[1] = (float)this->_readings[1] * this->_factors[1] + this->_offsets[1];
 }
 
 Measurement NAU7802::getWeight(void) {

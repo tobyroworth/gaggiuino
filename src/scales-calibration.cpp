@@ -33,7 +33,7 @@ void setup() {
   }
 
   // scales.init(calibration_factor_lc1, calibration_factor_lc2, &scales_i2c, SCALES_RDY);
-  scales.init(calibration_factor_lc1, calibration_factor_lc2, &Wire, SCALES_RDY);
+  scales.init(0.f, 0.f, calibration_factor_lc1, calibration_factor_lc2, &Wire, SCALES_RDY);
 
   USART_DEBUG.println("Initialized");
 }

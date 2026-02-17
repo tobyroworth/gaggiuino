@@ -15,6 +15,7 @@ private:
 
   uint8_t _channel = 0;
   int32_t _readings[2] = { 0, 0 };
+  float _offsets[2] = { 0.f, 0.f };
   float _factors[2] = { 0.f, 0.f };
   float _tareWeight = 0.f;
 
@@ -24,9 +25,17 @@ public:
     return instance;
   }
 
-  bool init(float scalesF1, float scalesF2, TwoWire* i2c, uint32_t drdyPin);
+  bool init (
+    float scalesOffset1,
+    float scalesOffset2,
+    float scalesFactor1,
+    float scalesFactor2,
+    TwoWire* i2c,
+    uint32_t drdyPin
+  );
   bool service(void);
   void tare(void);
+  void setOffset(float offset1, float offset2);
   void setFactors(float factor1, float factor2);
   void getReadings(int32_t* readings);
   void getUnits(float* units);
