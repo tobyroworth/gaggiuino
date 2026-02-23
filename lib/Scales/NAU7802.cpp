@@ -5,9 +5,9 @@ uint32_t _SCALES_RDY;
 volatile bool _ready = false;
 
 void handleScalesReady(void) {
-  if (digitalRead(_SCALES_RDY) == HIGH) {
+  // if (digitalRead(_SCALES_RDY) == HIGH) {
     _ready = true;
-  }
+  // }
 }
 
 bool NAU7802::init(
@@ -21,6 +21,7 @@ bool NAU7802::init(
 
   bool error = false;
 
+  // _SCALES_RDY = drdyPin;
   // pinMode(drdyPin, INPUT);
   // attachInterrupt(digitalPinToInterrupt(drdyPin), handleScalesReady, RISING);
 
@@ -41,6 +42,7 @@ bool NAU7802::init(
 }
 
 bool NAU7802::service(void) {
+  // if (_ready) {
   if (this->nau.available()) {
     const int32_t reading = this->nau.read();
     this->_readings[this->_channel] = reading;
@@ -88,8 +90,8 @@ void NAU7802::getReadings(int32_t* readings) {
 }
 
 void NAU7802::getUnits(float* units) {
-  units[0] = (float)this->_readings[0] * this->_factors[0] + this->_offsets[0];
-  units[1] = (float)this->_readings[1] * this->_factors[1] + this->_offsets[1];
+  units[0] = (float)(this->_readings[0] - this->_offsets[0]) * this->_factors[0];
+  units[1] = (float)(this->_readings[1] - this->_offsets[1]) * this->_factors[1];
 }
 
 Measurement NAU7802::getWeight(void) {

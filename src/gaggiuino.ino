@@ -85,7 +85,18 @@ void setup(void)
   LOG_INFO("Pressure sensor init");
 
   // Scales handling
-  scalesInit(0.f, 0.f, runningCfg.scalesF1, runningCfg.scalesF2);
+  // scalesInit(0.f, 0.f, runningCfg.scalesF1, runningCfg.scalesF2);
+  // zero1 -47200 zero2 -10700
+  // 0 -47200 -10700
+  // 156.3 369150 -429150
+  // 237.8 582650 -634550
+
+  // scalesInit(0.f, 0.f, runningCfg.scalesF1, runningCfg.scalesF2);
+  scalesInit(
+      -47200.f,
+      -10700.f,
+      0.0003775f,
+      -0.0003811f);
   LOG_INFO("Scales init");
 
   flowInterruptInit();

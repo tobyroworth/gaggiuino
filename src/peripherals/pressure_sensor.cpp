@@ -45,7 +45,7 @@ float getPressure(void) {  //returns sensor pressure data
 void getAdsError(void) {
   // Reset the hw i2c to try and recover comms
   // on fail to do so throw error
-  i2cResetState();
+  // i2cResetState();
 
   // Throw error code on ADS malfunction/miswiring
   // Invalid Voltage error code: -100
