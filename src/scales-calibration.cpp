@@ -1,7 +1,7 @@
 #include <Arduino.h>
 // #include <HX711_2.h>
 // #include <EasyNextionLibrary.h>
-#include <ADS1X15.h>
+// #include <ADS1X15.h>
 
 #include "NAU7802.h"
 
@@ -79,6 +79,7 @@ void loop() {
   //     timer = millis() + 100ul;
   //   }
   // }
+}
 
 void trigger0() {
   // calibration_factor_lc1 -= myNex.readNumber("n1.val");
