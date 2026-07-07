@@ -14,9 +14,9 @@
 HX711_2 loadcell(TIM3);
 
 #if defined SINGLE_HX711_BOARD
-  unsigned char scale_clk = OUTPUT;
+unsigned char scale_clk = OUTPUT;
 #else
-  unsigned char scale_clk = OUTPUT_OPEN_DRAIN;
+unsigned char scale_clk = OUTPUT_OPEN_DRAIN;
 #endif
 
 float calibration_factor_lc1 = 4000; //-7050 worked for my 440lb max scale setup
@@ -64,11 +64,11 @@ void loop() {
   if (millis() > timer) {
     if (myNex.currentPageId == 0) {
       loadcell.get_units(values);
-      myNex.writeStr("t0.txt",String(values[0],2));
-      myNex.writeStr("t1.txt",String(values[1],2));
+      myNex.writeStr("t0.txt", String(values[0], 2));
+      myNex.writeStr("t1.txt", String(values[1], 2));
 
-      myNex.writeStr("t2.txt",String(calibration_factor_lc1,2));
-      myNex.writeStr("t3.txt",String(calibration_factor_lc2,2));
+      myNex.writeStr("t2.txt", String(calibration_factor_lc1, 2));
+      myNex.writeStr("t3.txt", String(calibration_factor_lc2, 2));
     }
     timer = millis() + 100ul;
   }

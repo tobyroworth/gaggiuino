@@ -390,7 +390,8 @@ static void lcdRefresh(void) {
     }
 
   #ifdef DEBUG_ENABLED
-    lcdShowDebug(readTempSensor(), getAdsError());
+    getAdsError();
+    lcdShowDebug(readTempSensor(), 0);
   #endif
 
     /*LCD timer and warmup*/
